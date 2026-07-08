@@ -2,13 +2,29 @@
 // src/pages/[countryCode]/insights/[slug].astro
 import Layout from "../../../layouts/Layout.astro";
 import { getRegionParams } from "../../../lib/params/region-params";
-import { getPost } from "../../../lib/posts";
+import { getPost, posts } from "../../../lib/posts";
 
-// ★★★ 关键：导出 getStaticPaths ★★★
-export const getStaticPaths = getRegionParams;
+// ★★★ 自定义 getStaticPaths ★★★
+export async function getStaticPaths() {
+  // 1. 先获取所有 region 路径（国家代码）
+  const regionPaths = await getRegionParams();
+  
+  // 2. 为每个 region 和每个文章生成路径
+  const paths = [];
+  for (const regionPath of regionPaths) {
+    for (const post of posts) {
+      paths.push({
+        params: {
+          countryCode: regionPath.params.countryCode,
+          slug: post.slug,
+        },
+      });
+    }
+  }
+  return paths;
+}
 
-const { countryCode } = Astro.params;
-const { slug } = Astro.params;
+const { countryCode, slug } = Astro.params;
 
 // 查找文章
 const post = getPost(slug);
