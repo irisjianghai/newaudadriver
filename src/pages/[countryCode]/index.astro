@@ -1,60 +1,301 @@
 ---
-import { Image } from "astro:assets";
+// src/pages/index.astro
 import Layout from "../../layouts/Layout.astro";
 import { getRegionParams } from "../../lib/params/region-params";
-import heroImage from "../../assets/hero.png";
+import SectionHeading from "../../components/SectionHeading.astro";
+import Button from "../../components/Button.astro";
+// ★ 导入 SpecFilter
+import SpecFilter from "../../components/SpecFilter";
+// import ProductCard from "../../components/ProductCard.astro"; // 等有真实数据后再启用
 
 export const getStaticPaths = getRegionParams;
 
 const { countryCode } = Astro.params;
+
+// 产品分类数据
+const categories = [
+  {
+    slug: "ev-diagnostics",
+    name: "EV Diagnostics",
+    tagline: "Battery & Electrical",
+    description: "Precision instruments for modern electric vehicle service.",
+  },
+  {
+    slug: "power-supply",
+    name: "Power Supply",
+    tagline: "DC Sources & Loads",
+    description: "Reliable power solutions for lab and field applications.",
+  },
+  {
+    slug: "insulated-tools",
+    name: "Insulated Tools",
+    tagline: "1000V Certified",
+    description: "VDE/GS certified tools for high-voltage safety.",
+  },
+  {
+    slug: "field-lighting",
+    name: "Field Lighting",
+    tagline: "Off-Road & Adventure",
+    description: "Professional lighting for expedition and workshop.",
+  },
+];
+
+// 信任基石数据
+const trustPillars = [
+  {
+    title: "Supply-Chain Nexus",
+    body: "Located in the heart of the Jiangsu-Zhejiang-Shanghai power-electronics belt. We are your eyes in the factory."
+  },
+  {
+    title: "Rigorous Standards",
+    body: "Every instrument is verified against VDE, GS and IEC 60900. We ship only what we would use ourselves."
+  },
+  {
+    title: "Global Support",
+    body: "From datasheets to DHL / FedEx logistics and 3-year warranties, we handle the complexity end to end."
+  }
+];
+
+// ★ 模拟产品数据（后续替换为 Medusa 真实数据）
+const featuredProducts = [
+  {
+    slug: "oscilloscope-100mhz",
+    name: "Digital Oscilloscope 100MHz",
+    brand: "Rigol",
+    image: "/images/product-oscilloscope.png",
+    priceUSD: 399.00,
+    badges: ["Best Seller", "In Stock"],
+    keySpecs: [
+      { label: "Bandwidth", value: "100MHz" },
+      { label: "Channels", value: "4" },
+    ],
+  },
+  {
+    slug: "battery-analyzer",
+    name: "EV Battery Capacity Analyzer",
+    brand: "VoltField",
+    image: "/images/product-battery-analyzer.png",
+    priceUSD: 599.00,
+    badges: ["New"],
+    keySpecs: [
+      { label: "Voltage", value: "1000V" },
+      { label: "Accuracy", value: "±0.5%" },
+    ],
+  },
+  // 可以添加更多产品...
+];
 ---
 
 <Layout
-  description="E-commerce starter template built with Astro and Medusa for maximum performance. Browse our collection of products."
-  image={heroImage.src}
+  description="VoltField — Precision instruments for EV diagnostics, 1000V insulated tools, and off-grid power solutions. B2B supply chain partner in China."
 >
-  <section
-    class="flex items-center gap-12 overflow-hidden px-8 py-10 md:px-12 lg:min-h-[calc(100vh-96px-2rem)] lg:px-16"
-  >
-    <div class="flex flex-col gap-6 w-full md:flex-1 md:max-w-2xl">
-      <h1 class="text-5xl font-bold leading-tight tracking-tight">
-        Astro + Medusa <span class="whitespace-nowrap">e-commerce</span> starter template
-      </h1>
-      <p class="text-gray-500 text-base leading-relaxed">
-        This template is a good way to start building your e-commerce store with
-        maximum performance in mind.
+  <!-- ===== Hero 区域 ===== -->
+  <section class="relative overflow-hidden border-b border-gray-200 dark:border-gray-800">
+    <div class="absolute inset-0">
+      <img
+        src="/images/hero-split.png"
+        alt="Precision laboratory instruments and off-grid field power"
+        class="h-full w-full object-cover"
+      />
+      <div class="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-white/30 dark:from-gray-900 dark:via-gray-900/80 dark:to-gray-900/30" />
+      <div class="absolute inset-0 bg-gradient-to-t from-white to-transparent dark:from-gray-900 dark:to-transparent" />
+    </div>
+
+    <div class="relative mx-auto flex max-w-7xl flex-col justify-center px-4 py-24 sm:px-6 lg:px-8 lg:py-36">
+      <p class="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400">
+        <span class="h-px w-8 bg-blue-600 dark:bg-blue-400" />
+        Industrial-grade power solutions
       </p>
-      <div class="flex items-center gap-4 mt-2">
+      <h1 class="mt-6 max-w-3xl text-4xl font-bold leading-[1.05] tracking-tight text-balance sm:text-6xl text-gray-900 dark:text-white">
+        Precision instruments for your{' '}
+        <span class="text-blue-600 dark:text-blue-400">Lab.</span> Reliable power for your{' '}
+        <span class="text-orange-600 dark:text-orange-400">Adventure.</span>
+      </h1>
+      <p class="mt-6 max-w-xl text-pretty leading-relaxed text-gray-600 dark:text-gray-400">
+        VoltField sources, tests and delivers professional EV diagnostics,
+        1000V insulated tools and off-grid power gear — straight from
+        China's power-electronics heartland to workshops and
+        expeditions in 50+ countries.
+      </p>
+
+      <div class="mt-10 flex flex-col gap-3 sm:flex-row">
         <a
-          href="https://github.com/Bystrol/astro-medusa-starter"
-          target="_blank"
-          class="px-6 py-3 bg-black text-white text-sm font-medium rounded-full hover:bg-gray-800 transition-colors"
+          href={`/${countryCode}/products?category=ev-diagnostics`}
+          class="group flex items-center justify-center gap-2 bg-blue-600 px-6 py-3.5 text-sm font-bold uppercase tracking-wide text-white transition-transform hover:-translate-y-0.5 hover:bg-blue-700"
         >
-          Open Github
+          I'm a Technician
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 transition-transform group-hover:translate-x-1"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
         <a
-          href={`/${countryCode}/store`}
-          class="px-6 py-3 border border-black text-black text-sm font-medium rounded-full hover:bg-gray-100 transition-colors"
+          href={`/${countryCode}/products?category=field-lighting`}
+          class="group flex items-center justify-center gap-2 border border-gray-300 bg-white/40 px-6 py-3.5 text-sm font-bold uppercase tracking-wide text-gray-700 backdrop-blur transition-colors hover:border-orange-600 hover:text-orange-600 dark:border-gray-700 dark:bg-gray-900/40 dark:text-gray-300 dark:hover:border-orange-400 dark:hover:text-orange-400"
         >
-          Browse products
+          I'm an Explorer
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 transition-transform group-hover:translate-x-1"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <dl class="mt-16 grid max-w-2xl grid-cols-2 gap-6 border-t border-gray-200 pt-8 dark:border-gray-800 sm:grid-cols-4">
+        <div>
+          <dt class="font-mono text-2xl font-bold text-blue-600 dark:text-blue-400">50+</dt>
+          <dd class="mt-1 text-xs uppercase tracking-wide text-gray-600 dark:text-gray-400">Countries served</dd>
+        </div>
+        <div>
+          <dt class="font-mono text-2xl font-bold text-blue-600 dark:text-blue-400">1500V</dt>
+          <dd class="mt-1 text-xs uppercase tracking-wide text-gray-600 dark:text-gray-400">Max rated systems</dd>
+        </div>
+        <div>
+          <dt class="font-mono text-2xl font-bold text-blue-600 dark:text-blue-400">48h</dt>
+          <dd class="mt-1 text-xs uppercase tracking-wide text-gray-600 dark:text-gray-400">Dispatch from China</dd>
+        </div>
+        <div>
+          <dt class="font-mono text-2xl font-bold text-blue-600 dark:text-blue-400">3-Yr</dt>
+          <dd class="mt-1 text-xs uppercase tracking-wide text-gray-600 dark:text-gray-400">Factory warranty</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ===== 产品矩阵 ===== -->
+  <section class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+    <SectionHeading
+      eyebrow="Product Matrix"
+      title="Four categories, curated — not catalogued"
+      description="We don't stock a thousand SKUs. We test hundreds of devices each year and list only the hardware that earns a place in the VoltField catalog."
+    />
+
+    <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {categories.map((cat) => (
+        <a
+          key={cat.slug}
+          href={`/${countryCode}/products?category=${cat.slug}`}
+          class="group relative flex flex-col justify-between overflow-hidden border border-gray-200 bg-white p-6 transition-colors hover:border-blue-600 dark:border-gray-800 dark:bg-gray-900 dark:hover:border-blue-400"
+        >
+          <div class="flex h-12 w-12 items-center justify-center bg-blue-600 text-white dark:bg-blue-500">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          </div>
+          <div class="mt-16">
+            <p class="font-mono text-[11px] uppercase tracking-wide text-gray-500 dark:text-gray-400">{cat.tagline}</p>
+            <h3 class="mt-1 text-lg font-bold text-gray-900 dark:text-white">{cat.name}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-400">{cat.description}</p>
+            <span class="mt-4 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-blue-600 dark:text-blue-400">
+              Explore
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+            </span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- ===== SpecFilter 电压筛选器 ★★★ 新增 ===== -->
+  <SpecFilter client:only="react" countryCode={countryCode} />
+
+  <!-- ===== 精选产品 ===== -->
+  <section class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+    <SectionHeading
+      eyebrow="Featured Hardware"
+      title="Field-tested, spec-verified"
+      description="Each product in our catalog is tested against VDE/GS standards before it reaches your workshop."
+    />
+
+    <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {featuredProducts.map((product) => (
+        <a
+          key={product.slug}
+          href={`/${countryCode}/products/${product.slug}`}
+          class="group block overflow-hidden rounded-lg border border-gray-200 bg-white transition-all hover:shadow-lg dark:border-gray-800 dark:bg-gray-900"
+        >
+          <div class="aspect-square overflow-hidden bg-gray-100 dark:bg-gray-800">
+            <img
+              src={product.image || "/placeholder.svg"}
+              alt={product.name}
+              class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <div class="p-4">
+            <p class="font-mono text-[11px] uppercase tracking-wide text-blue-600 dark:text-blue-400">
+              {product.brand}
+            </p>
+            <h3 class="mt-1 text-sm font-medium text-gray-900 dark:text-white line-clamp-2">
+              {product.name}
+            </h3>
+            <p class="mt-2 text-lg font-bold text-blue-600 dark:text-blue-400">
+              ${product.priceUSD.toFixed(2)}
+            </p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- ===== 信任基石 ===== -->
+  <section class="relative overflow-hidden border-t border-gray-200 dark:border-gray-800">
+    <div class="absolute inset-0">
+      <img
+        src="/images/shanghai-hub.png"
+        alt="Industrial technology hub in East China at night"
+        class="h-full w-full object-cover opacity-30"
+      />
+      <div class="absolute inset-0 bg-white/80 dark:bg-gray-900/80" />
+    </div>
+
+    <div class="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+      <SectionHeading
+        eyebrow="Why VoltField"
+        title="Your professional eyes in the global power heartland"
+        description="We are not a store — we are a technical bridge between top-tier Chinese factories and your workshop or expedition."
+      />
+
+      <div class="mt-12 grid gap-4 lg:grid-cols-3">
+        {trustPillars.map((pillar, i) => (
+          <div
+            key={pillar.title}
+            class="border border-gray-200 border-t-2 border-t-blue-600 bg-white/80 p-8 dark:border-gray-800 dark:bg-gray-900/80"
+          >
+            <span class="font-mono text-sm text-blue-600 dark:text-blue-400">0{i + 1}</span>
+            <div class="mt-4 h-8 w-8 text-blue-600 dark:text-blue-400">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            </div>
+            <h3 class="mt-4 text-lg font-bold text-gray-900 dark:text-white">{pillar.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-400">{pillar.body}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-8 flex flex-col items-start gap-4 border border-dashed border-gray-300 p-8 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left dark:border-gray-700">
+        <div>
+          <p class="font-mono text-sm text-blue-600 dark:text-blue-400">[ 31.2304° N, 121.4737° E ]</p>
+          <p class="mt-1 text-lg font-bold text-gray-900 dark:text-white">Strategic Hub: Shanghai &amp; East China</p>
+        </div>
+        <a
+          href={`/${countryCode}/about`}
+          class="group inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wide text-blue-600 dark:text-blue-400"
+        >
+          Our story
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 transition-transform group-hover:translate-x-1"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
       </div>
     </div>
+  </section>
 
-    <div
-      class="relative hidden h-full min-h-[36rem] md:flex md:flex-1 md:items-center md:justify-end"
-    >
-      <Image
-        src={heroImage}
-        width={800}
-        height={900}
-        alt="Featured product"
-        widths={[400, 600, 800]}
-        sizes="(max-width: 1024px) 50vw, 40vw"
-        format="webp"
-        quality={80}
-        class="pointer-events-none absolute right-[-58%] top-1/2 z-10 h-auto max-h-none w-[66rem] max-w-none -translate-y-1/2 object-contain lg:right-[-64%] lg:w-[82rem] xl:right-[-62%] xl:w-[98rem]"
-      />
+  <!-- ===== CTA ===== -->
+  <section class="border-t border-gray-200 bg-blue-600 dark:border-gray-800 dark:bg-blue-700">
+    <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-4 py-16 text-white sm:px-6 lg:flex-row lg:items-center lg:px-8">
+      <div>
+        <h2 class="text-3xl font-bold tracking-tight text-balance sm:text-4xl">
+          Building a workshop or gearing up for an expedition?
+        </h2>
+        <p class="mt-3 max-w-xl text-pretty leading-relaxed text-blue-100">
+          Send us your list. A technical advisor reviews your specs and
+          replies within 6 business hours.
+        </p>
+      </div>
+     <Button variant="electric" size="lg" href={`/${countryCode}/contact`}>
+  Request a B2B Quote
+</Button>
     </div>
   </section>
 </Layout>

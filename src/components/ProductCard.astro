@@ -1,0 +1,109 @@
+---
+// src/components/ProductCard.astro
+
+export interface Product {
+  slug: string;
+  name: string;
+  brand?: string;
+  image?: string;
+  priceUSD?: number;
+  badges?: string[];
+  keySpecs?: Array<{ label: string; value: string }>;
+}
+
+export interface Props {
+  product: Product;
+  countryCode?: string;
+}
+
+const { product, countryCode = "us" } = Astro.props;
+
+// 格式化价格
+const formatPrice = (amount?: number) => {
+  if (amount === undefined) return "$0.00";
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount);
+};
+
+// 安全获取数据
+const badges = product.badges?.slice(0, 2) || [];
+const keySpecs = product.keySpecs?.slice(0, 2) || [];
+const imageUrl = product.image || "/placeholder.svg";
+---
+
+<a
+  href={`/${countryCode}/products/${product.slug}`}
+  class="group flex flex-col border border-gray-200 bg-white transition-colors hover:border-blue-600 dark:border-gray-800 dark:bg-gray-900 dark:hover:border-blue-400"
+>
+  <!-- 图片区域 -->
+  <div class="relative aspect-square overflow-hidden bg-gray-100 dark:bg-gray-800">
+    <img
+      src={imageUrl}
+      alt={product.name}
+      class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+      loading="lazy"
+      decoding="async"
+    />
+    <!-- 徽章 -->
+    {badges.length > 0 && (
+      <div class="absolute left-0 top-0 flex flex-wrap gap-1 p-3">
+        {badges.map((badge) => (
+          <span
+            key={badge}
+            class="bg-white/80 px-2 py-1 font-mono text-[10px] uppercase tracking-wide text-blue-600 backdrop-blur dark:bg-gray-900/80"
+          >
+            {badge}
+          </span>
+        ))}
+      </div>
+    )}
+  </div>
+
+  <!-- 信息区域 -->
+  <div class="flex flex-1 flex-col p-5">
+    {product.brand && (
+      <p class="font-mono text-[11px] uppercase tracking-wide text-blue-600 dark:text-blue-400">
+        {product.brand}
+      </p>
+    )}
+    <h3 class="mt-2 text-base font-bold leading-snug text-balance text-gray-900 dark:text-white">
+      {product.name}
+    </h3>
+
+    <!-- 关键规格 -->
+    {keySpecs.length > 0 && (
+      <dl class="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 border-t border-gray-200 pt-4 dark:border-gray-700">
+        {keySpecs.map((spec) => (
+          <div key={spec.label}>
+            <dt class="text-[10px] uppercase tracking-wide text-gray-500 dark:text-gray-400">
+              {spec.label}
+            </dt>
+            <dd class="font-mono text-sm text-blue-600 dark:text-blue-400">
+              {spec.value}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    )}
+
+    <!-- 价格和详情链接 -->
+    <div class="mt-auto flex items-end justify-between pt-6">
+      <div>
+        <p class="text-[10px] uppercase tracking-wide text-gray-500 dark:text-gray-400">
+          From
+        </p>
+        <p class="text-lg font-bold text-gray-900 dark:text-white">
+          {formatPrice(product.priceUSD)}
+        </p>
+      </div>
+      <span class="flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-gray-500 transition-colors group-hover:text-blue-600 dark:text-gray-400 dark:group-hover:text-blue-400">
+        Details
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+      </span>
+    </div>
+  </div>
+</a>

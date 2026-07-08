@@ -1,0 +1,147 @@
+---
+// src/pages/[countryCode]/about.astro
+import Layout from "../../layouts/Layout.astro";
+import { getRegionParams } from "../../lib/params/region-params";
+import SectionHeading from "../../components/SectionHeading.astro";
+
+export const getStaticPaths = getRegionParams;
+
+const { countryCode } = Astro.params;
+
+const edge = [
+  {
+    title: "Supply-Chain Nexus",
+    body: "Located in the heart of the Jiangsu-Zhejiang-Shanghai power-electronics belt. We bridge the gap between top-tier factories in Nanjing, Changzhou and Ningbo and your workshop.",
+  },
+  {
+    title: "Rigorous Standards",
+    body: "We don't just trade — we verify. Every instrument is selected for compliance with international safety standards like VDE, GS and IEC 60900.",
+  },
+  {
+    title: "Global Support",
+    body: "Our boutique approach ensures personalized technical support. From diagnostic datasheets to global express logistics, we handle the complexity.",
+  },
+];
+
+const stats = [
+  { value: "300+", label: "Devices tested yearly" },
+  { value: "~40", label: "SKUs that make the cut" },
+  { value: "24h", label: "Response window" },
+  { value: "NDA", label: "Protected sourcing" },
+];
+---
+
+<Layout
+  title="About — VoltField Solutions"
+  description="VoltField is a boutique solution provider bridging China's power-electronics supply chain (Jiangsu-Zhejiang-Shanghai) with global EV technicians and overlanding explorers."
+>
+  <!-- ===== Hero ===== -->
+  <section class="relative overflow-hidden border-b border-[#1e293b]">
+    <div class="absolute inset-0">
+      <img
+        src="/images/shanghai-hub.png"
+        alt="Industrial technology hub in East China at night"
+        class="h-full w-full object-cover opacity-40"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-[#0F1115] via-[#0F1115]/70 to-[#0F1115]/40" />
+    </div>
+    <div class="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-32">
+      <p class="font-mono text-xs uppercase tracking-widest text-[#C6FF00]">
+        About VoltField
+      </p>
+      <h1 class="mt-4 max-w-3xl text-4xl font-bold leading-tight tracking-tight text-balance text-white sm:text-5xl">
+        At the nexus of global power &amp; local precision.
+      </h1>
+      <p class="mt-6 max-w-2xl text-pretty leading-relaxed text-gray-400">
+        We sit in the heart of the world's power-electronics center —
+        China's Yangtze River Delta. Facing the new-energy wave, we saw
+        that overseas repair shops and explorers lacked truly professional
+        tools and safety assurance. VoltField exists to connect China's
+        most advanced power-testing technology with the professional and
+        adventurous demands of the world.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== Strategic edge ===== -->
+  <section class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+    <SectionHeading
+      eyebrow="Why VoltField"
+      title="The strategic edge"
+      description="Three pillars that make us more than another Chinese reseller."
+    />
+    <div class="mt-12 grid gap-4 md:grid-cols-3">
+      {edge.map((item, i) => (
+        <div
+          key={item.title}
+          class="group border border-[#1e293b] border-t-2 border-t-[#1e293b] bg-[#1a1d23] p-8 transition-colors hover:border-t-[#C6FF00]"
+        >
+          <div class="flex h-10 w-10 items-center justify-center bg-[#C6FF00] font-mono font-bold text-[#0F1115]">
+            0{i + 1}
+          </div>
+          <!-- 使用 SVG 图标替代 lucide-react -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C6FF00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-6 h-7 w-7">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+          </svg>
+          <h3 class="mt-4 text-lg font-bold text-[#C6FF00]">
+            {item.title}
+          </h3>
+          <p class="mt-3 text-sm leading-relaxed text-gray-400">
+            {item.body}
+          </p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ===== Curation philosophy ===== -->
+  <section class="border-y border-[#1e293b] bg-[#0F1115]/40">
+    <div class="mx-auto grid max-w-7xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:px-8">
+      <SectionHeading
+        eyebrow="The Boutique Approach"
+        title="We are curators, not couriers"
+        description="Our catalog doesn't need a thousand products. We test hundreds of devices each year and select only the ~40 hardcore items that earn a place at VoltField. This buyer's-eye professionalism is exactly what serious B2B clients want."
+      />
+      <div class="grid grid-cols-2 gap-4">
+        {stats.map((stat) => (
+          <div key={stat.label} class="border border-[#1e293b] bg-[#1a1d23] p-6">
+            <p class="font-mono text-3xl font-bold text-[#C6FF00]">
+              {stat.value}
+            </p>
+            <p class="mt-2 text-xs uppercase tracking-wide text-gray-400">
+              {stat.label}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Commitment ===== -->
+  <section class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+    <div class="border border-dashed border-[#1e293b] p-10 text-center">
+      <p class="font-mono text-sm text-[#C6FF00]">
+        [ 31.2304° N, 121.4737° E ] — Shanghai &amp; East China
+      </p>
+      <h2 class="mx-auto mt-4 max-w-3xl text-2xl font-bold text-balance text-white sm:text-3xl">
+        At VoltField, you're not chatting with a bot — you talk directly
+        with our technical advisors.
+      </h2>
+      <p class="mx-auto mt-4 max-w-xl text-pretty leading-relaxed text-gray-400">
+        Technical documentation support, a 3-year warranty agreement and a
+        24-hour response policy back every order we ship worldwide.
+      </p>
+      <a
+        href={`/${countryCode}/contact`}
+        class="group mt-8 inline-flex items-center gap-2 bg-[#C6FF00] px-6 py-3.5 text-sm font-bold uppercase tracking-wide text-[#0F1115] transition-transform hover:-translate-y-0.5"
+      >
+        Talk to an advisor
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 transition-transform group-hover:translate-x-1">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+</Layout>

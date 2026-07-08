@@ -1,0 +1,118 @@
+---
+// src/pages/[countryCode]/contact.astro
+import Layout from "../../layouts/Layout.astro";
+import { getRegionParams } from "../../lib/params/region-params";
+import SectionHeading from "../../components/SectionHeading.astro";
+import ContactForm from "../../components/ContactForm";
+
+export const getStaticPaths = getRegionParams;
+
+const { countryCode } = Astro.params;
+
+const infoBlocks = [
+  {
+    label: "Sales & quotes",
+    value: "sales@voltfieldexample.com",
+    sub: "Response within 6 business hours",
+  },
+  {
+    label: "Technical support",
+    value: "engineering@voltfieldexample.com",
+    sub: "Spec advice from real engineers",
+  },
+  {
+    label: "East China hub",
+    value: "Shanghai · Jiangsu · Zhejiang",
+    sub: "Yangtze River Delta power-electronics belt",
+  },
+  {
+    label: "Operating hours",
+    value: "Mon–Sat · 09:00–19:00 CST",
+    sub: "GMT+8 · Global time-zone coverage",
+  },
+];
+---
+
+<Layout
+  title="Contact & B2B Quotes — VoltField Solutions"
+  description="Request a B2B bulk quote, technical advice or a distribution partnership. VoltField technical advisors reply within 6 business hours."
+>
+  <!-- ===== Hero ===== -->
+  <section class="relative border-b border-[#1e293b]">
+    <div class="absolute inset-0">
+      <img
+        src="/images/shanghai-hub.png"
+        alt="VoltField logistics hub in East China"
+        class="h-full w-full object-cover opacity-25"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-[#0F1115] to-[#0F1115]/60" />
+    </div>
+    <div class="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+      <p class="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[#C6FF00]">
+        <span class="h-px w-8 bg-[#C6FF00]" />
+        Let's build your order
+      </p>
+      <h1 class="mt-6 max-w-3xl text-4xl font-bold leading-tight tracking-tight text-balance text-white sm:text-5xl">
+        Talk to a technical advisor, not a chatbot
+      </h1>
+      <p class="mt-6 max-w-xl text-pretty leading-relaxed text-gray-400">
+        Send your model numbers, quantities and target specs. A real
+        engineer reviews every request and replies with a quote, lead time
+        and logistics plan.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== Contact Section ===== -->
+  <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+    <div class="grid gap-12 lg:grid-cols-[1fr_1.1fr]">
+      <!-- ===== 左侧信息栏 ===== -->
+      <div>
+        <SectionHeading
+          eyebrow="Get in touch"
+          title="Your bridge to China's power heartland"
+          description="Whether you're sourcing a single calibrated instrument or negotiating a container of insulated tools, we handle the technical and logistical complexity."
+        />
+
+        <div class="mt-10 grid gap-px overflow-hidden border border-[#1e293b] bg-[#1e293b] sm:grid-cols-2">
+          {infoBlocks.map((b) => (
+            <div key={b.label} class="bg-[#1a1d23] p-6">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6FF00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+                <rect x="2" y="4" width="20" height="16" rx="2" />
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+              </svg>
+              <p class="mt-4 font-mono text-[11px] uppercase tracking-wide text-gray-400">
+                {b.label}
+              </p>
+              <p class="mt-1 font-bold text-white">{b.value}</p>
+              <p class="mt-1 text-sm leading-relaxed text-gray-400">
+                {b.sub}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <!-- ===== 物流提示 ===== -->
+        <div class="mt-4 flex items-start gap-4 border border-dashed border-[#FF5200]/50 bg-[#FF5200]/5 p-6">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF5200" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 h-6 w-6 shrink-0">
+            <rect x="1" y="3" width="15" height="13" />
+            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+            <circle cx="5.5" cy="18" r="2.5" />
+            <circle cx="18.5" cy="18" r="2.5" />
+          </svg>
+          <div>
+            <p class="font-bold text-[#FF5200]">Global logistics, sorted</p>
+            <p class="mt-1 text-sm leading-relaxed text-gray-400">
+              DHL / FedEx express, sea freight consolidation and full export
+              documentation to 50+ countries. We quote landed cost, not just
+              ex-works.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== 右侧联系表单 ===== -->
+      <ContactForm client:only="react" />
+    </div>
+  </section>
+</Layout>

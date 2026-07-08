@@ -1,0 +1,188 @@
+---
+// src/pages/[countryCode]/service.astro
+import Layout from "../../layouts/Layout.astro";
+import { getRegionParams } from "../../lib/params/region-params";
+import SectionHeading from "../../components/SectionHeading.astro";
+
+export const getStaticPaths = getRegionParams;
+
+const { countryCode } = Astro.params;
+
+const pillars = [
+  {
+    accent: "electric",
+    title: "Precision Consulting",
+    body: "We match the right instrument to your specific application, preventing costly selection errors.",
+    bullets: [
+      "Instrument parameter matching",
+      "Custom system configuration",
+      "Application gap analysis",
+    ],
+  },
+  {
+    accent: "safety",
+    title: "Compliance & Docs",
+    body: "Navigate global safety standards with ease. Full technical documentation and certification support.",
+    bullets: [
+      "VDE / GS / CE certificate support",
+      "Third-party calibration coordination",
+      "Multilingual manuals",
+    ],
+  },
+  {
+    accent: "electric",
+    title: "B2B Logistics",
+    body: "From Shanghai to your doorstep. We handle the complexity of international trade so you don't have to.",
+    bullets: [
+      "DDP / DDU shipping options",
+      "Customs clearance support",
+      "Mixed order consolidation",
+    ],
+  },
+  {
+    accent: "safety",
+    title: "After-Sales Nexus",
+    body: "Real-time technical support via China's most direct supply-chain channels. No automated bots.",
+    bullets: [
+      "3-year factory warranty access",
+      "Remote video calibration guidance",
+      "Fast-track spare parts delivery",
+    ],
+  },
+];
+
+const steps = [
+  { n: "01", label: "Inquiry" },
+  { n: "02", label: "Spec Check" },
+  { n: "03", label: "Quote & Pay" },
+  { n: "04", label: "QC & Ship" },
+  { n: "05", label: "Post-Sales" },
+];
+---
+
+<Layout
+  title="Service Hub — Consulting, Compliance, Logistics & After-Sales"
+  description="More than a transaction. VoltField provides technical selection consulting, compliance & documentation support, global B2B logistics and after-sales for electronic test equipment."
+>
+  <!-- ===== Hero ===== -->
+  <section class="border-b border-[#1e293b] bg-[#0F1115]/40">
+    <div class="mx-auto max-w-7xl px-4 py-20 text-center sm:px-6 lg:px-8">
+      <p class="font-mono text-xs uppercase tracking-widest text-[#C6FF00]">
+        Service Hub
+      </p>
+      <h1 class="mx-auto mt-4 max-w-3xl text-4xl font-bold tracking-tight text-balance text-white sm:text-5xl">
+        More than just a transaction
+      </h1>
+      <p class="mx-auto mt-4 max-w-xl text-pretty leading-relaxed text-gray-400">
+        Empowering your technicians with end-to-end technical support — from
+        selection to delivery and beyond.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== Four pillars ===== -->
+  <section class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+    <div class="grid gap-4 md:grid-cols-2">
+      {pillars.map((p) => {
+        const isElectric = p.accent === "electric";
+        const accentColor = isElectric ? "#C6FF00" : "#FF5200";
+        return (
+          <div
+            key={p.title}
+            class="relative overflow-hidden border border-[#1e293b] bg-[#1a1d23] p-8"
+          >
+            <span
+              class={`absolute left-0 top-0 h-full w-1 ${isElectric ? "bg-[#C6FF00]" : "bg-[#FF5200]"}`}
+            />
+            <!-- 图标：使用 SVG 替代 lucide-react -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={accentColor}
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="h-8 w-8"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <h3
+              class={`mt-4 text-xl font-bold uppercase tracking-wide ${isElectric ? "text-[#C6FF00]" : "text-[#FF5200]"}`}
+            >
+              {p.title}
+            </h3>
+            <p class="mt-3 text-sm leading-relaxed text-gray-400">
+              {p.body}
+            </p>
+            <ul class="mt-5 space-y-2">
+              {p.bullets.map((b) => (
+                <li key={b} class="flex items-start gap-2 text-sm text-gray-300">
+                  <span class="font-mono text-[#C6FF00]">&gt;&gt;</span>
+                  {b}
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- ===== Process timeline ===== -->
+  <section class="border-y border-[#1e293b] bg-[#0F1115]/40">
+    <div class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+      <SectionHeading
+        eyebrow="The Process"
+        title="A transparent five-step flow"
+        description="Every engagement follows the same clear path, so you always know what happens next."
+        align="center"
+      />
+      <ol class="mt-14 grid grid-cols-2 gap-px overflow-hidden border border-[#1e293b] bg-[#1e293b] sm:grid-cols-5">
+        {steps.map((s) => (
+          <li
+            key={s.n}
+            class="flex flex-col items-center gap-2 bg-[#1a1d23] px-4 py-10 text-center"
+          >
+            <span class="font-mono text-3xl font-bold text-[#C6FF00]">
+              {s.n}
+            </span>
+            <span class="text-xs uppercase tracking-widest text-gray-400">
+              {s.label}
+            </span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+    <div class="flex flex-col items-start justify-between gap-6 border border-[#1e293b] bg-[#1a1d23] p-10 lg:flex-row lg:items-center">
+      <div>
+        <h2 class="text-2xl font-bold text-balance text-white sm:text-3xl">
+          Ready to source with a technical partner?
+        </h2>
+        <p class="mt-3 max-w-xl text-pretty leading-relaxed text-gray-400">
+          Send us your requirements — company, application field and quantity
+          — and a technical advisor reviews your specs within 6 business
+          hours.
+        </p>
+      </div>
+      <a
+        href={`/${countryCode}/contact`}
+        class="group inline-flex shrink-0 items-center gap-2 bg-[#C6FF00] px-6 py-4 text-sm font-bold uppercase tracking-wide text-[#0F1115] transition-transform hover:-translate-y-0.5"
+      >
+        Submit an RFQ
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 transition-transform group-hover:translate-x-1">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+</Layout>

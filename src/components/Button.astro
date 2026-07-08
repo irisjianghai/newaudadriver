@@ -1,0 +1,73 @@
+---
+// src/components/Button.astro
+
+export interface Props {
+  variant?: 
+    | "default" 
+    | "outline" 
+    | "secondary" 
+    | "ghost" 
+    | "destructive" 
+    | "link" 
+    | "electric" 
+    | "safety";
+  size?: "default" | "xs" | "sm" | "lg" | "icon" | "icon-xs" | "icon-sm" | "icon-lg";
+  href?: string;
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
+  class?: string;
+}
+
+const { 
+  variant = "default", 
+  size = "default", 
+  href, 
+  type = "button",
+  disabled = false,
+  class: className = "",
+  ...props 
+} = Astro.props;
+
+// ===== 变体样式（电光绿主题） =====
+const variantClasses = {
+  default: "bg-[#C6FF00] text-[#0F1115] hover:bg-[#a8d900] focus-visible:ring-[#C6FF00]/50",
+  outline: "border border-[#1e293b] bg-transparent hover:bg-[#1e293b] hover:text-[#f1f5f9] dark:border-[#1e293b] dark:bg-[#0F1115]/30 dark:hover:bg-[#1e293b]/50",
+  secondary: "bg-[#1e293b] text-[#f1f5f9] hover:bg-[#2d3a4f]",
+  ghost: "hover:bg-[#1e293b] hover:text-[#f1f5f9] dark:hover:bg-[#1e293b]/50",
+  destructive: "bg-[#FF5200]/10 text-[#FF5200] hover:bg-[#FF5200]/20 focus-visible:ring-[#FF5200]/20 dark:bg-[#FF5200]/20 dark:hover:bg-[#FF5200]/30",
+  link: "text-[#C6FF00] underline-offset-4 hover:underline",
+  electric: "bg-[#C6FF00] text-[#0F1115] hover:bg-[#a8d900] focus-visible:ring-[#C6FF00]/50",
+  safety: "bg-[#FF5200] text-white hover:bg-[#e64800] focus-visible:ring-[#FF5200]/50",
+};
+
+// ===== 尺寸样式 =====
+const sizeClasses = {
+  default: "h-8 gap-1.5 px-2.5 text-sm rounded-lg",
+  xs: "h-6 gap-1 px-2 text-xs rounded-[10px]",
+  sm: "h-7 gap-1 px-2.5 text-[0.8rem] rounded-[12px]",
+  lg: "h-9 gap-1.5 px-2.5 text-sm rounded-lg",
+  icon: "size-8 rounded-lg",
+  "icon-xs": "size-6 rounded-[10px]",
+  "icon-sm": "size-7 rounded-[12px]",
+  "icon-lg": "size-9 rounded-lg",
+};
+
+// ===== 基础样式 =====
+const baseClass = "inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-[#C6FF00] focus-visible:ring-3 focus-visible:ring-[#C6FF00]/50 disabled:pointer-events-none disabled:opacity-50";
+
+// ===== 拼接最终类名 =====
+const finalClass = `${baseClass} ${variantClasses[variant] || variantClasses.default} ${sizeClasses[size] || sizeClasses.default} ${className || ""}`.trim();
+
+// ===== 判断是否为链接 =====
+const isLink = !!href;
+---
+
+{isLink ? (
+  <a href={href} class={finalClass} {...props}>
+    <slot />
+  </a>
+) : (
+  <button type={type} class={finalClass} disabled={disabled} {...props}>
+    <slot />
+  </button>
+)}

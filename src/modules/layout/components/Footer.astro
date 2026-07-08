@@ -1,103 +1,107 @@
 ---
-interface Props {
-  countryCode: string;
-}
+// src/modules/layout/components/Footer.astro
 
-const { countryCode } = Astro.props;
-const currentYear = new Date().getFullYear();
-
-const shopLinks = [
-  { href: `/${countryCode}`, label: "Home" },
-  { href: `/${countryCode}/store`, label: "All products" },
-  { href: `/${countryCode}/cart`, label: "Cart" },
-  { href: `/${countryCode}/checkout`, label: "Checkout" },
+// 直接在组件中定义数据，移除了对 'next/link' 和 'lucide-react' 的依赖
+// 您以后可以把这个数据移到单独的文件里
+const categories = [
+  { slug: 'ev-diagnostics', name: 'EV Diagnostics' },
+  { slug: 'power-electronics', name: 'Power Electronics' },
+  { slug: 'insulated-tools', name: 'Insulated Tools' },
+  { slug: 'off-road-power', name: 'Off-Road Power' },
 ];
 
-const companyLinks = [
-  { href: `/${countryCode}/privacy`, label: "Privacy" },
-  { href: `/${countryCode}/terms`, label: "Terms" },
+const columns = [
   {
-    href: "https://github.com/Bystrol/astro-medusa-starter",
-    label: "GitHub",
-    external: true,
+    title: 'Products',
+    links: categories.map((c) => ({
+      href: `/products?category=${c.slug}`,
+      label: c.name,
+    })),
+  },
+  {
+    title: 'Company',
+    links: [
+      { href: '/about', label: 'About Us' },
+      { href: '/service', label: 'Service Hub' },
+      { href: '/insights', label: 'Insights' },
+      { href: '/contact', label: 'Contact' },
+    ],
+  },
+  {
+    title: 'Support',
+    links: [
+      { href: '/service', label: 'Technical Consulting' },
+      { href: '/service', label: 'Compliance & Docs' },
+      { href: '/service', label: 'Global Logistics' },
+      { href: '/contact', label: 'Request a Quote' },
+    ],
   },
 ];
+
+const currentYear = new Date().getFullYear();
 ---
 
-<footer class="border-t border-black/10 bg-stone-50">
-  <div class="px-8 py-14 md:px-12 lg:px-16">
-    <div
-      class="grid gap-10 border-b border-black/10 pb-10 md:grid-cols-2 xl:grid-cols-[1.2fr_0.8fr_0.8fr_1fr]"
-    >
-      <section class="max-w-md">
-        <p
-          class="text-xs font-semibold uppercase tracking-[0.28em] text-black/55"
-        >
-          Astro Medusa Starter
+<footer class="border-t border-[#e5e7eb] bg-[#fafafa] dark:border-[#374151] dark:bg-[#111827]">
+  <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+    <div class="grid gap-12 lg:grid-cols-[1.4fr_repeat(3,1fr)]">
+      <!-- Logo 和介绍区域 -->
+      <div>
+        <a href="/" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <span class="flex h-8 w-8 items-center justify-center bg-[#2563eb] text-white rounded">
+            <!-- 使用纯 SVG 代替 lucide-react 图标 -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg>
+          </span>
+          <span class="text-lg font-bold tracking-tight text-gray-900 dark:text-white">
+            VOLT<span class="text-[#2563eb]">FIELD</span>
+          </span>
+        </a>
+        <p class="mt-4 max-w-xs text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+          Precision instruments for your lab. Reliable power for your
+          adventure. Your trusted supply-chain partner in China's
+          power-electronics heartland.
         </p>
-        <h2 class="mt-4 text-3xl font-semibold tracking-tight text-black">
-          A storefront that feels ready to ship.
-        </h2>
-        <p class="mt-4 text-sm leading-6 text-black/65">
-          Built for fast browsing, clean checkout, and a polished shopping flow
-          from first click to confirmed order.
+        <p class="mt-6 font-mono text-xs text-gray-500 dark:text-gray-500">
+          [ 31.2304° N, 121.4737° E ] — Shanghai Hub
         </p>
-      </section>
+      </div>
 
-      <nav aria-label="Footer shop navigation">
-        <p class="text-sm font-semibold text-black">Shop</p>
-        <ul class="mt-4 space-y-3 text-sm text-black/65">
-          {
-            shopLinks.map((link) => (
-              <li>
-                <a class="transition hover:text-black" href={link.href}>
-                  {link.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
-
-      <nav aria-label="Footer company navigation">
-        <p class="text-sm font-semibold text-black">Company</p>
-        <ul class="mt-4 space-y-3 text-sm text-black/65">
-          {
-            companyLinks.map((link) => (
-              <li>
-                <a
-                  class="transition hover:text-black"
-                  href={link.href}
-                  target={link.external ? "_blank" : undefined}
-                  rel={link.external ? "noreferrer" : undefined}
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
-
-      <section>
-        <p class="text-sm font-semibold text-black">Customer Care</p>
-        <div class="mt-4 space-y-4 text-sm text-black/65">
-          <p>
-            Need help with the starter? Browse the catalog, test the cart, and
-            explore the full purchase flow end to end.
-          </p>
-          <a
-            class="inline-flex rounded-full bg-black px-5 py-3 text-sm font-medium text-white transition hover:bg-black/85"
-            href={`/${countryCode}/store`}
-          >
-            Start shopping
-          </a>
-        </div>
-      </section>
+      <!-- 链接列 -->
+      {
+        columns.map((col) => (
+          <div>
+            <h3 class="text-xs font-bold uppercase tracking-widest text-gray-900 dark:text-white">
+              {col.title}
+            </h3>
+            <ul class="mt-4 space-y-3">
+              {
+                col.links.map((link) => (
+                  <li>
+                    <a
+                      href={link.href}
+                      class="text-sm text-gray-600 transition-colors hover:text-[#2563eb] dark:text-gray-400 dark:hover:text-[#2563eb]"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        ))
+      }
     </div>
 
-    <p class="text-sm text-black/55 pt-6">
-      &copy; {currentYear} Astro Medusa Starter. Built by Michał Bystryk.
-    </p>
+    <!-- 底部版权栏 -->
+    <div class="mt-14 flex flex-col gap-4 border-t border-gray-200 pt-8 sm:flex-row sm:items-center sm:justify-between dark:border-gray-800">
+      <p class="font-mono text-xs text-gray-600 dark:text-gray-400">
+        © {currentYear} VoltField Solutions. All rights reserved.
+      </p>
+      <p class="flex flex-wrap gap-x-4 gap-y-1 font-mono text-xs text-gray-600 dark:text-gray-400">
+        <span>VDE / GS Certified Supply</span>
+        <span class="text-[#2563eb] dark:text-[#3b82f6]">Global Shipping via DHL / FedEx</span>
+      </p>
+    </div>
   </div>
 </footer>

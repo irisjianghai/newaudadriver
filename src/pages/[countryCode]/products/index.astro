@@ -1,0 +1,124 @@
+---
+// src/pages/[countryCode]/products/index.astro
+import Layout from "../../../layouts/Layout.astro";
+import { getRegionParams } from "../../../lib/params/region-params";
+import SectionHeading from "../../../components/SectionHeading.astro";
+import ProductsBrowser from "../../../components/ProductsBrowser";
+
+export const getStaticPaths = getRegionParams;
+
+const { countryCode } = Astro.params;
+
+// ===== 产品分类数据 =====
+const categories = [
+  { slug: "ev-diagnostics", name: "EV Diagnostics" },
+  { slug: "power-supply", name: "Power Supply" },
+  { slug: "insulated-tools", name: "Insulated Tools" },
+  { slug: "field-lighting", name: "Field Lighting" },
+];
+
+// ===== 模拟产品数据 =====
+const products = [
+  {
+    slug: "oscilloscope-100mhz",
+    name: "Digital Oscilloscope 100MHz",
+    brand: "Rigol",
+    image: "/images/product-oscilloscope.png",
+    priceUSD: 399.00,
+    badges: ["Best Seller", "In Stock"],
+    category: "ev-diagnostics",
+    audience: ["Technician"],
+    keySpecs: [
+      { label: "Bandwidth", value: "100MHz" },
+      { label: "Channels", value: "4" },
+    ],
+  },
+  {
+    slug: "battery-analyzer",
+    name: "EV Battery Capacity Analyzer",
+    brand: "VoltField",
+    image: "/images/product-battery-analyzer.png",
+    priceUSD: 599.00,
+    badges: ["New"],
+    category: "ev-diagnostics",
+    audience: ["Technician"],
+    keySpecs: [
+      { label: "Voltage", value: "1000V" },
+      { label: "Accuracy", value: "±0.5%" },
+    ],
+  },
+  {
+    slug: "insulated-wrench-set",
+    name: "1000V Insulated Wrench Set",
+    brand: "VoltField",
+    image: "/images/product-insulated-wrench.png",
+    priceUSD: 129.00,
+    badges: ["VDE Certified"],
+    category: "insulated-tools",
+    audience: ["Technician"],
+    keySpecs: [
+      { label: "Rating", value: "1000V" },
+      { label: "Standard", value: "IEC 60900" },
+    ],
+  },
+  {
+    slug: "field-light-12v",
+    name: "12V LED Field Light",
+    brand: "VoltField",
+    image: "/images/product-field-light.png",
+    priceUSD: 89.00,
+    badges: ["Waterproof"],
+    category: "field-lighting",
+    audience: ["Explorer"],
+    keySpecs: [
+      { label: "Power", value: "12V" },
+      { label: "Lumens", value: "1200 lm" },
+    ],
+  },
+  {
+    slug: "power-supply-1500v",
+    name: "1500V DC Power Supply",
+    brand: "VoltField",
+    image: "/images/product-power-supply.png",
+    priceUSD: 1299.00,
+    badges: ["High Voltage"],
+    category: "power-supply",
+    audience: ["Technician"],
+    keySpecs: [
+      { label: "Voltage", value: "1500V" },
+      { label: "Power", value: "3kW" },
+    ],
+  },
+  {
+    slug: "inverter-2000w",
+    name: "2000W Pure Sine Inverter",
+    brand: "VoltField",
+    image: "/images/product-inverter.png",
+    priceUSD: 349.00,
+    badges: ["Best Seller"],
+    category: "field-lighting",
+    audience: ["Explorer"],
+    keySpecs: [
+      { label: "Power", value: "2000W" },
+      { label: "Efficiency", value: "94%" },
+    ],
+  },
+];
+---
+
+<Layout
+  title="Products — VoltField Solutions"
+  description="Browse our catalog of EV diagnostics, insulated tools, power supplies, and off-grid lighting. VDE/GS certified."
+>
+  <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+    <SectionHeading
+      eyebrow="Product Catalog"
+      title="Hardware that earns a place in your kit"
+      description="Every product in our catalog is tested against VDE/GS standards before it reaches your workshop."
+    />
+
+    <div class="mt-12">
+      <ProductsBrowser client:only="react" products={products} categories={categories} />
+    </div>
+  </div>
+</Layout>

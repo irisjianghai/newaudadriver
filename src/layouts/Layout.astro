@@ -1,4 +1,6 @@
 ---
+// src/layouts/Layout.astro
+
 import { getRegion } from "@lib/data/regions";
 import { CartSidebar } from "@modules/layout/components/CartSidebar";
 import Footer from "@modules/layout/components/Footer.astro";
@@ -14,9 +16,11 @@ interface Props {
   noindex?: boolean;
 }
 
-const SITE_NAME = "Astro + Medusa Starter";
+// ===== 品牌信息 =====
+const SITE_NAME = "VoltField Solutions";
+const SITE_DEFAULT_TITLE = "VoltField Solutions — Precision Power Instruments & Field Gear";
 const DEFAULT_DESCRIPTION =
-  "E-commerce starter template built with Astro and Medusa for maximum performance.";
+  "Professional EV testing equipment, VDE insulated tools, and off-grid power solutions. Your trusted supply-chain partner in China's power-electronics heartland.";
 
 const {
   title,
@@ -26,7 +30,7 @@ const {
   noindex = false,
 } = Astro.props;
 
-const pageTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
+const pageTitle = title ? `${title} | ${SITE_NAME}` : SITE_DEFAULT_TITLE;
 const canonicalUrl = new URL(
   Astro.url.pathname,
   Astro.site ?? Astro.url.origin
@@ -43,11 +47,25 @@ const regionId = region?.id || null;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="bg-[#0F1115]">
   <head>
     <ClientRouter />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
+
+    <!-- ===== 字体 ===== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:wght@400..700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- ===== 主题色（电光绿） ===== -->
+    <meta name="theme-color" content="#0F1115" />
+    <meta name="color-scheme" content="dark" />
+
+    <!-- ===== 预加载资源 ===== -->
     <link
       rel="dns-prefetch"
       href="//medusa-public-images.s3.eu-west-1.amazonaws.com"
@@ -61,13 +79,14 @@ const regionId = region?.id || null;
     <link rel="icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
 
+    <!-- ===== Meta 标签 ===== -->
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl.href} />
 
     {noindex && <meta name="robots" content="noindex, nofollow" />}
 
-    <!-- Open Graph -->
+    <!-- ===== Open Graph ===== -->
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content={type} />
@@ -75,7 +94,7 @@ const regionId = region?.id || null;
     <meta property="og:site_name" content={SITE_NAME} />
     {image && <meta property="og:image" content={image} />}
 
-    <!-- Twitter Card -->
+    <!-- ===== Twitter Card ===== -->
     <meta
       name="twitter:card"
       content={image ? "summary_large_image" : "summary"}
@@ -83,26 +102,79 @@ const regionId = region?.id || null;
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
     {image && <meta name="twitter:image" content={image} />}
+
+    <!-- ===== 全局样式覆盖（电光绿主题） ===== -->
+    <style is:global>
+      /* 字体变量 */
+      :root {
+        --font-sans: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+        --electric: #C6FF00;
+        --electric-foreground: #0F1115;
+        --safety: #FF5200;
+        --safety-foreground: #ffffff;
+      }
+      
+      body {
+        font-family: var(--font-sans);
+        background-color: #0F1115;
+        color: #f1f5f9;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      /* 电光绿工具类 */
+      .text-electric {
+        color: #C6FF00;
+      }
+      .bg-electric {
+        background-color: #C6FF00;
+        color: #0F1115;
+      }
+      .border-electric {
+        border-color: #C6FF00;
+      }
+      .hover\\:text-electric:hover {
+        color: #C6FF00;
+      }
+      .hover\\:border-electric:hover {
+        border-color: #C6FF00;
+      }
+      
+      /* 安全橙工具类 */
+      .text-safety {
+        color: #FF5200;
+      }
+      .bg-safety {
+        background-color: #FF5200;
+        color: #ffffff;
+      }
+      .border-safety {
+        border-color: #FF5200;
+      }
+
+      /* 悬停效果 */
+      .hover\\:bg-electric-hover:hover {
+        background-color: #a8d900;
+      }
+
+      /* 文字发光效果 */
+      .text-glow {
+        text-shadow: 0 0 18px rgba(198, 255, 0, 0.35);
+      }
+      .text-glow-safety {
+        text-shadow: 0 0 18px rgba(255, 82, 0, 0.35);
+      }
+    </style>
   </head>
-  <body class="min-h-screen bg-white text-black">
+  <body class="bg-[#0F1115] text-[#f1f5f9]">
     <div class="mx-auto flex min-h-screen w-full max-w-[1800px] flex-col">
-      <Nav client:load countryCode={countryCode} regionId={regionId} />
+      <Nav client:only="react" countryCode={countryCode} regionId={regionId} />
       <main class="flex-1 min-h-[calc(100vh-72px)]">
         <slot />
       </main>
       <Footer countryCode={countryCode} />
-      <CartSidebar client:load countryCode={countryCode} />
+      <CartSidebar client:only="react" countryCode={countryCode} />
     </div>
   </body>
 </html>
-
-<style>
-  body {
-    display: flex;
-    flex-direction: column;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    min-height: 100vh;
-  }
-</style>

@@ -1,1 +1,134 @@
+/* src/styles/global.css */
+
+/* ===== 1. Tailwind 基础 ===== */
 @import "tailwindcss";
+
+/* ===== 2. 自定义主题变量（电光绿主题） ===== */
+@theme {
+  /* 字体 */
+  --font-sans: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* ★★★ 品牌色 Electric（电光绿）★★★ */
+  --color-electric: #C6FF00;
+  --color-electric-foreground: #0F1115;
+  
+  /* ★★★ 品牌色 Safety（安全橙）★★★ */
+  --color-safety: #FF5200;
+  --color-safety-foreground: #ffffff;
+
+  /* ★★★ 表面色（深色系）★★★ */
+  --color-surface: #1a1d23;
+  --color-surface-2: #1e293b;
+
+  /* ★★★ 基础色（深色背景 + 浅色文字）★★★ */
+  --color-background: #0F1115;
+  --color-foreground: #f1f5f9;
+  --color-card: #1a1d23;
+  --color-card-foreground: #f1f5f9;
+  --color-popover: #1a1d23;
+  --color-popover-foreground: #f1f5f9;
+  --color-primary: #C6FF00;
+  --color-primary-foreground: #0F1115;
+  --color-secondary: #1e293b;
+  --color-secondary-foreground: #f1f5f9;
+  --color-muted: #1e293b;
+  --color-muted-foreground: #94a3b8;
+  --color-accent: #C6FF00;
+  --color-accent-foreground: #0F1115;
+  --color-destructive: #FF5200;
+  --color-border: #1e293b;
+  --color-input: #1e293b;
+  --color-ring: #C6FF00;
+}
+
+/* ===== 3. 全局基础样式（深色模式为主） ===== */
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  
+  body {
+    background-color: #0F1115;
+    color: #f1f5f9;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* 工具类：电光绿 */
+  .text-electric {
+    color: #C6FF00;
+  }
+  .bg-electric {
+    background-color: #C6FF00;
+  }
+  .border-electric {
+    border-color: #C6FF00;
+  }
+  
+  /* 工具类：安全橙 */
+  .text-safety {
+    color: #FF5200;
+  }
+  .bg-safety {
+    background-color: #FF5200;
+  }
+  
+  /* 字体 */
+  .font-sans {
+    font-family: var(--font-sans);
+  }
+  .font-mono {
+    font-family: var(--font-mono);
+  }
+}
+
+/* ===== 4. 自定义工具类 ===== */
+@layer utilities {
+  .grid-lines {
+    background-image: 
+      linear-gradient(to right, rgba(198, 255, 0, 0.08) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(198, 255, 0, 0.08) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+  .text-glow {
+    text-shadow: 0 0 18px rgba(198, 255, 0, 0.35);
+  }
+  .text-glow-safety {
+    text-shadow: 0 0 18px rgba(255, 82, 0, 0.35);
+  }
+  .card-hover {
+    transition: all 0.2s ease;
+  }
+  .card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(198, 255, 0, 0.15);
+  }
+}
+
+/* ===== 5. 滚动条 ===== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #1a1d23;
+}
+::-webkit-scrollbar-thumb {
+  background: #C6FF00;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a8d900;
+}
+
+/* ===== 6. 选中文本 ===== */
+::selection {
+  background: #C6FF00;
+  color: #0F1115;
+}
+::-moz-selection {
+  background: #C6FF00;
+  color: #0F1115;
+}
