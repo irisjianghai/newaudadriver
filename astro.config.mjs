@@ -17,6 +17,9 @@ const medusaBackendDomain = PUBLIC_MEDUSA_BACKEND_URL
 
 // https://astro.build/config
 export default defineConfig({
+  // ★★★ 添加 site 配置 ★★★
+  site: 'https://newaudadriver.pages.dev',
+  
   adapter: cloudflare({
     imageService: "compile",
   }),
